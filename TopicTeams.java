@@ -38,14 +38,15 @@ public class TopicTeams {
                 }
             });
 
-
             ArrayList<Record> cloneNames = new ArrayList<>();
             cloneNames.addAll(names);
+
+            int startingTableNo = 0;
 
             while (cloneNames.size() > 0) {
                 Record n = cloneNames.remove(ThreadLocalRandom.current().nextInt(0, cloneNames.size()));
 
-                int tableNo = 0;
+                int tableNo = startingTableNo;
                 boolean allocated = false;
                 do {
                     if (n.isAllowedOnTable(tables.get(tableNo))) {
@@ -53,9 +54,12 @@ public class TopicTeams {
                         allocated = true;
                     } else {
                         tableNo++;
+                        if(tableNo >8) tableNo = 0;
                     }
-                } while (tableNo < 9 && !allocated);
+                } while (tableNo != startingTableNo && !allocated);
 
+                startingTableNo++;
+                if (startingTableNo > 8 ) startingTableNo =0;
             }
 
             System.out.println("--------------- Tables");
